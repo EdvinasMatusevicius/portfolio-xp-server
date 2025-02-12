@@ -1,0 +1,1 @@
+export {router as mediaPlayer } from './mediaPlayer';

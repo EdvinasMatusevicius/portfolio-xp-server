@@ -1,34 +1,14 @@
-import './config/index';
-
 import express from 'express';
-import { config } from './config/index';
-import { registerMiddlewares, registerRoutes } from './middlewares';
-import { logger } from './helpers';
+import { mediaPlayer } from './routers';
+import { errorHandler, logger } from './middlewares';
+const app = express();
+const port = 8080;
 
-Promise.all([]).then(bootstrapServer).catch(handleServerInitError);
+app.use(express.json());
+app.use(logger);
+app.use('/mediaPlayer', mediaPlayer)
 
-function bootstrapServer() {
-  console.log('server')
-  const app = express();
-
-  const PORT = config.PORT;
-
-  registerMiddlewares(app);
-  registerRoutes(app);
-
-  app.listen(PORT, () => {
-    logger.info(`Server listening on port ${PORT}`);
-  });
-}
-
-function handleServerInitError(e: unknown) {
-  logger.error('Error initializing server:', e);
-}
-
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-process.on('uncaughtException', (error) => {
-  logger.error('Uncaught Exception:', error);
+app.use(errorHandler);
+app.listen(port, () => {
+  console.log('app running on port:' + port + ':)')
 });
