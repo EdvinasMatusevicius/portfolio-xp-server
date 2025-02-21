@@ -1,23 +1,26 @@
 import { Request, Response, Router } from "express";
 import { logger, validateMediaRequest } from "../middlewares";
+import { RadioBrowserApi, StationSearchType } from 'radio-browser-api'
+import { getLithuanianStations } from "../controllers/mediaPlayerController";
 
 export const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  throw new Error('THIS IS ERROR FOR TEST');
-  res.send(
-    {
-      message: 'ALOHA HELLO',
-      data: [ 1,2,3,4,5,6 ]
-    },
-  )
-  console.log('SENT')
-});
-router.post('/', validateMediaRequest, (req: Request, res: Response) => {
-  res.send(
-    {
-      message: 'THIS IS POST REQ',
-      data: req.body
-    },
-  )
+router.get('/', getLithuanianStations);
+router.get('/radio-stations', async (req: Request, res: Response) => {
+  try {
+    const apiResponse = await fetch('https://de1.api.radio-browser.info/stations/byname/jazz', {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    if (!apiResponse.ok) {
+      throw new Error(`HTTP error! status: ${apiResponse.status}`);
+    }
+    const stations = await apiResponse.json();
+    res.json(stations);
+
+  } catch (error: any) {
+    console.error("Error fetching radio stations:", error);
+    res.status(500).send('Error fetching radio stations');
+  }
 });
