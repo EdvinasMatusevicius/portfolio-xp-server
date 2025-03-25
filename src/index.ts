@@ -20,5 +20,5 @@ app.use('/feedback', feedback);
 
 app.use(errorHandler);
 app.listen(port, () => {
-  console.log('app running on port:' + port + ':)')
+  console.log('app running on port:' + port + ':) in env: '+ process.env.NODE_ENV)
 });
