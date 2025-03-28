@@ -3,7 +3,6 @@ import { fetchLithuanianRadioStations } from '../services/mediaPlayerService';
 
 export const getLithuanianStations = async (req: Request, res: Response) => {
     try {
-        console.log(req)
         const stations = await fetchLithuanianRadioStations(10);
         res.json(stations);
     } catch (error) {
