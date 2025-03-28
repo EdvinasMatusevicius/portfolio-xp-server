@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import { fetchLithuanianRadioStations } from '../services/mediaPlayerService'; // Import service function
+import { fetchLithuanianRadioStations } from '../services/mediaPlayerService';
 
 export const getLithuanianStations = async (req: Request, res: Response) => {
     try {
-        const stations = await fetchLithuanianRadioStations(10); // Call the service function
+        console.log(req)
+        const stations = await fetchLithuanianRadioStations(10);
         res.json(stations);
     } catch (error) {
         console.error("Error in mediaPlayerController:", error);
